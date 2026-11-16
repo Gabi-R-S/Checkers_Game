@@ -5,7 +5,6 @@
 [sub_resource type="Environment" id="Environment_mwb40"]
 background_mode = 1
 background_color = Color(0.287101, 0.544132, 0.577773, 1)
-background_energy_multiplier = 1.2
 ambient_light_color = Color(0.0888049, 0.152295, 0.19799, 1)
 glow_enabled = true
 fog_enabled = true

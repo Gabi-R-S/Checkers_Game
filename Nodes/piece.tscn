@@ -1,6 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://bndj6avfbofd2"]
+[gd_scene load_steps=8 format=3 uid="uid://bndj6avfbofd2"]
 
 [ext_resource type="Script" uid="uid://dxs7u4hkh8v8n" path="res://Scripts/Piece.cs" id="1_6ppfu"]
+[ext_resource type="Script" uid="uid://clqh1de4go1vh" path="res://Scripts/PieceMaterialChanger.cs" id="2_0m0wf"]
+[ext_resource type="Material" uid="uid://bpuwsigdt1tw3" path="res://Materials/player1Piece.tres" id="3_i0y1n"]
+[ext_resource type="Material" uid="uid://bop0s38st450c" path="res://Materials/player2Piece.tres" id="4_qvr3m"]
+[ext_resource type="Material" uid="uid://dlhq8flsr2nu6" path="res://Materials/highlighted.tres" id="5_r7jgx"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_o63np"]
 height = 0.25
@@ -21,3 +25,7 @@ shape = SubResource("CylinderShape3D_o63np")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, 0)
 mesh = SubResource("CylinderMesh_6ppfu")
+script = ExtResource("2_0m0wf")
+player1Material = ExtResource("3_i0y1n")
+player2Material = ExtResource("4_qvr3m")
+highlightedMaterial = ExtResource("5_r7jgx")

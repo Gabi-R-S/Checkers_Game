@@ -36,6 +36,9 @@ public partial class BoardController : Node3D
     public event Action<uint, uint> PositionHover;
     public event Action<uint, uint> PositionUnhover;
     public event Action<uint, uint> PositionClicked;
+    public event Action<uint> PieceHover;
+    public event Action<uint> PieceUnhover;
+    public event Action<uint> PieceClicked;
     public event Action BoardChanged;
     BoardPosition[,] positions;
 
@@ -47,7 +50,7 @@ public partial class BoardController : Node3D
 
     public float BoardRadius
     {
-        get => Math.Max(board.Size.X, board.Size.Y) * (float)Math.Sqrt(2);
+        get => board == null ? 1 : Math.Max(board.Size.X, board.Size.Y) * (float)Math.Sqrt(2);
     }
 
     void OnPositionHover(uint x, uint y)
@@ -62,6 +65,7 @@ public partial class BoardController : Node3D
     {
         PositionClicked?.Invoke(x, y);
     }
+
     Vector3 GetPosition(int x, int y)
     {
         return new Vector3((x - (board.Size.X - 1) / 2.0f) * positionSpacing,

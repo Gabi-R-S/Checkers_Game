@@ -31,6 +31,26 @@ public class Board {
         return heights[x,y];    
     }
 
+
+    public bool IsThereAPieceInPosition(uint x, uint y)
+    {
+        
+        if (x >= w || y >= h)
+        {
+            return false;
+        }
+
+        foreach (var (pID,(px, py, p)) in Pieces)
+        {
+            if (x == px && y == py)
+            {
+                return true;
+            }
+        }    
+
+        return false;
+    }
+
     public Dictionary<uint, (uint, uint, Player)> Pieces {get; private set;}= new Dictionary<uint, (uint, uint, Player)>();
 
     public Vector2I Size{get=> new Vector2I((int)w,(int)h);}
