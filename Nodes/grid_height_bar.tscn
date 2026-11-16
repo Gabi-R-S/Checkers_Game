@@ -1,4 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://bfgh6mefm17aa"]
+[gd_scene load_steps=7 format=3 uid="uid://bfgh6mefm17aa"]
+
+[ext_resource type="Script" uid="uid://db2nlxh2jxkn3" path="res://Scripts/PositionMaterialChanger.cs" id="1_f7lv5"]
+[ext_resource type="Material" uid="uid://ng6plgkxk502" path="res://Materials/even.tres" id="2_kb4i0"]
+[ext_resource type="Material" uid="uid://s6v72oh8a6s7" path="res://Materials/odd.tres" id="3_10d84"]
+[ext_resource type="Material" uid="uid://dlhq8flsr2nu6" path="res://Materials/highlighted.tres" id="4_sty1c"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ko7wy"]
 size = Vector3(1, 0.5, 1)
@@ -13,3 +18,7 @@ shape = SubResource("BoxShape3D_ko7wy")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_ko7wy")
+script = ExtResource("1_f7lv5")
+evenMaterial = ExtResource("2_kb4i0")
+oddMaterial = ExtResource("3_10d84")
+highlightedMaterial = ExtResource("4_sty1c")

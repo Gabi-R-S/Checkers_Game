@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://dc4gi8qh30x4f"]
+
+[ext_resource type="Script" uid="uid://bi5o0mm5a85k7" path="res://Scripts/BoardPosition.cs" id="1_1j677"]
+[ext_resource type="PackedScene" uid="uid://bfgh6mefm17aa" path="res://Nodes/grid_height_bar.tscn" id="2_bu06i"]
+
+[node name="BoardPosition" type="Node3D"]
+script = ExtResource("1_1j677")
+heightStepPrefab = ExtResource("2_bu06i")
+heightPerStep = 0.5

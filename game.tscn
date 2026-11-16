@@ -1,33 +1,25 @@
-[gd_scene load_steps=5 format=3 uid="uid://dh3i63mat4bnu"]
+[gd_scene load_steps=3 format=3 uid="uid://dh3i63mat4bnu"]
 
-[ext_resource type="Script" uid="uid://bi5o0mm5a85k7" path="res://Scripts/BoardPosition.cs" id="1_e2o6t"]
-[ext_resource type="PackedScene" uid="uid://bfgh6mefm17aa" path="res://Nodes/grid_height_bar.tscn" id="2_feb5d"]
-[ext_resource type="Script" uid="uid://cvmjfomv8wbqy" path="res://Scripts/Test/Increase.cs" id="3_fc0e3"]
-[ext_resource type="Script" uid="uid://dwgdy2txcco22" path="res://Scripts/Test/Decrease.cs" id="4_7jktm"]
+[ext_resource type="PackedScene" uid="uid://ckdaf4vonbu8u" path="res://Nodes/board_controller.tscn" id="1_80nbo"]
+
+[sub_resource type="Environment" id="Environment_mwb40"]
+background_mode = 1
+background_color = Color(0.287101, 0.544132, 0.577773, 1)
+background_energy_multiplier = 1.2
+ambient_light_color = Color(0.0888049, 0.152295, 0.19799, 1)
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.458393, 0.574954, 0.592413, 1)
 
 [node name="Master" type="Node3D"]
 
-[node name="BoardPosition" type="Node3D" parent="."]
-script = ExtResource("1_e2o6t")
-heightStepPrefab = ExtResource("2_feb5d")
-heightPerStep = 0.5
+[node name="BoardController" parent="." instance=ExtResource("1_80nbo")]
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.789204, 3.81835)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 20)
+environment = SubResource("Environment_mwb40")
+fov = 80.0
 
-[node name="Node2D" type="Node2D" parent="."]
-
-[node name="Increase" type="Button" parent="Node2D" node_paths=PackedStringArray("target")]
-offset_right = 74.0
-offset_bottom = 31.0
-text = "Increase"
-script = ExtResource("3_fc0e3")
-target = NodePath("../../BoardPosition")
-
-[node name="Decrease" type="Button" parent="Node2D" node_paths=PackedStringArray("target")]
-offset_left = 83.0
-offset_right = 157.0
-offset_bottom = 31.0
-text = "Decrease"
-script = ExtResource("4_7jktm")
-target = NodePath("../../BoardPosition")
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 24.8963, 0)
+omni_range = 19.223

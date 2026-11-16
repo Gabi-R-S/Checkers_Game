@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using static Godot.CollisionObject3D;
 public partial class BoardPosition : Node3D
 {
+
     const uint MAX_HEIGHT_STEPS = 10000;
     [Export]
-    uint x;
+    public uint X;
     [Export]
-    uint y;
+    public uint Y;
+
 
     [Export]
     PackedScene heightStepPrefab;
@@ -18,9 +20,9 @@ public partial class BoardPosition : Node3D
     uint heightSteps = 0;
     Stack<Area3D> steps = new ();
 
-    public event Action<uint,uint> OnHover;
-    public event Action<uint,uint> OnUnhover;
-    public event Action<uint,uint> OnClicked;
+    public event Action<uint,uint> Hover;
+    public event Action<uint,uint> Unhover;
+    public event Action<uint,uint> Clicked;
 
     HashSet<Node3D> currentHovered = new HashSet<Node3D>();
 
@@ -38,7 +40,7 @@ public partial class BoardPosition : Node3D
             HeightSteps--;
         }
     }
-    uint HeightSteps
+    public uint HeightSteps
     {
         get => heightSteps;
         set
@@ -87,29 +89,23 @@ public partial class BoardPosition : Node3D
         }
     }
 
-
-    public void SetHoverCallbacks(Action<uint,uint> onHover, Action<uint,uint> onUnhover)
-    {
-        this.OnHover = onHover;
-        this.OnUnhover = onUnhover;
-    }
     void OnMouseEntered(Node3D node)
     {
         if(currentHovered.Add(node))
         {
-            OnHover?.Invoke(x,y);
+            Hover?.Invoke(X,Y);
         }
     }
     void OnMouseExited(Node3D node)
     {
         if(currentHovered.Remove(node))
         {
-            OnUnhover?.Invoke(x,y);
+            Unhover?.Invoke(X,Y);
         }
     }
     void OnChildClicked()
     {
-        OnClicked?.Invoke(x,y);
+        Clicked?.Invoke(X,Y);
     }
 
 }

@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://ckdaf4vonbu8u"]
+
+[ext_resource type="Script" uid="uid://hkofj8p0cjbt" path="res://Scripts/BoardController.cs" id="1_aarou"]
+[ext_resource type="PackedScene" uid="uid://dc4gi8qh30x4f" path="res://Nodes/board_position.tscn" id="2_irkvg"]
+
+[node name="BoardController" type="Node3D"]
+script = ExtResource("1_aarou")
+boardPositionPrefab = ExtResource("2_irkvg")
+Size = Vector2i(4, 4)
