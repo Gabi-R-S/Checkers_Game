@@ -6,6 +6,7 @@ public partial class CameraController : Camera3D
     [Export]
     BoardController controller;
 
+
     [Export]
     bool invertHorizontalRotation = false;
     [Export]
