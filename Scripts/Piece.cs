@@ -56,6 +56,7 @@ public partial class Piece : Area3D
             Unhover?.Invoke(ID);
         }
     }
+    
     void OnChildClicked()
     {
         Clicked?.Invoke(ID);

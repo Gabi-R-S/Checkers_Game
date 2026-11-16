@@ -22,7 +22,8 @@ public partial class Master : Node3D
             {
                 board.Pieces.Add(pID,(x, i, Player.PLAYER1));
                 pID ++;
-                board.Pieces.Add(pID,(x, (uint)(board.Size.Y - 1 - i), Player.PLAYER1));
+                
+                board.Pieces.Add(pID,(x, (uint)(board.Size.Y - 1 - i), Player.PLAYER2));
                 pID ++;     
             }
         }

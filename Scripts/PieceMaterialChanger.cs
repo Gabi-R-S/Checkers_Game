@@ -27,7 +27,7 @@ public partial class PieceMaterialChanger : MeshInstance3D
     {
         Piece parent = GetParent<Piece>();
         
-        normalMaterial = parent.OwnerPlayer == Player.PLAYER1? player1Material: player2Material;
+        normalMaterial = parent.OwnerPlayer == Player.PLAYER1 ? player1Material: player2Material;
 
         BecomeNormal();
 

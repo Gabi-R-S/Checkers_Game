@@ -115,6 +115,7 @@ public partial class BoardController : Node3D
 
             piece.ID = pID;
             piece.BoardPosition = new Vector2I((int) x, (int) y);   
+            piece.OwnerPlayer = p;
 
             piece.Position=GetPiecePosition((int)x,(int) y);
             AddChild(piece);             
