@@ -3,6 +3,7 @@ using System;
 
 public partial class BoardController : Node3D
 {
+
     [Export]
     PackedScene boardPositionPrefab;
 
@@ -17,6 +18,16 @@ public partial class BoardController : Node3D
     public event Action<uint,uint> PositionUnhover;
     public event Action<uint,uint> PositionClicked;
 
+    public event Action BoardChanged; 
+
+
+    public Vector3 Centre { 
+        get=>new Vector3(0,0,0);
+        }
+    
+    public float BoardRadius {
+            get=> Math.Max(Size.X,Size.Y) * (float) Math.Sqrt(2);
+        }
 
     void OnPositionHover(uint x, uint y)
     {
@@ -32,7 +43,7 @@ public partial class BoardController : Node3D
     }
     Vector3 GetPosition(int x, int y)
     {
-        return new Vector3((x - Size.X / 2) * positionSpacing, 0, (y - Size.Y / 2) * positionSpacing);
+        return new Vector3((x - (Size.X - 1 ) / 2.0f) * positionSpacing, 0, (y - ( Size.Y - 1) / 2.0f) * positionSpacing);
     }
 
     public override void _Ready()
@@ -54,5 +65,6 @@ public partial class BoardController : Node3D
                 AddChild(position);
             }
         }
+        BoardChanged?.Invoke();
     }
 }

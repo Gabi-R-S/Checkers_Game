@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://bl53mo0c2thms"]
+
+[ext_resource type="Script" uid="uid://n63b726ad233" path="res://Scripts/CameraController.cs" id="1_kyx7j"]
+
+[sub_resource type="Environment" id="Environment_mwb40"]
+background_mode = 1
+background_color = Color(0.287101, 0.544132, 0.577773, 1)
+background_energy_multiplier = 1.2
+ambient_light_color = Color(0.0888049, 0.152295, 0.19799, 1)
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.458393, 0.574954, 0.592413, 1)
+
+[node name="BoardCamera" type="Camera3D"]
+environment = SubResource("Environment_mwb40")
+fov = 80.0
+script = ExtResource("1_kyx7j")

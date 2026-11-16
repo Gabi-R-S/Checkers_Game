@@ -1,24 +1,16 @@
 [gd_scene load_steps=3 format=3 uid="uid://dh3i63mat4bnu"]
 
 [ext_resource type="PackedScene" uid="uid://ckdaf4vonbu8u" path="res://Nodes/board_controller.tscn" id="1_80nbo"]
-
-[sub_resource type="Environment" id="Environment_mwb40"]
-background_mode = 1
-background_color = Color(0.287101, 0.544132, 0.577773, 1)
-background_energy_multiplier = 1.2
-ambient_light_color = Color(0.0888049, 0.152295, 0.19799, 1)
-glow_enabled = true
-fog_enabled = true
-fog_light_color = Color(0.458393, 0.574954, 0.592413, 1)
+[ext_resource type="PackedScene" uid="uid://bl53mo0c2thms" path="res://Nodes/board_camera.tscn" id="2_e2o6t"]
 
 [node name="Master" type="Node3D"]
 
 [node name="BoardController" parent="." instance=ExtResource("1_80nbo")]
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="BoardCamera" parent="." node_paths=PackedStringArray("controller") instance=ExtResource("2_e2o6t")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 20)
-environment = SubResource("Environment_mwb40")
-fov = 80.0
+controller = NodePath("../BoardController")
+movementSpeed = 5.0
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 24.8963, 0)
