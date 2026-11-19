@@ -53,5 +53,26 @@ public class Board {
 
     public Dictionary<uint, (uint, uint, Player)> Pieces {get; private set;}= new Dictionary<uint, (uint, uint, Player)>();
 
+    public bool ContainsPieceAt(uint x, uint y)
+    {
+        foreach(var (X,Y,p) in Pieces.Values)
+        {
+            if(x == X && y == Y)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    public bool IsPieceOfType(uint id, Player type)
+    {
+        if (!Pieces.ContainsKey(id))
+        {
+            return false;
+        }
+        return Pieces[id].Item3 == type;
+    }
+
     public Vector2I Size{get=> new Vector2I((int)w,(int)h);}
 }

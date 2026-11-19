@@ -4,8 +4,48 @@ using System;
 public partial class Piece : Area3D
 {
     public uint ID { get; set; }
-    public Vector2I BoardPosition { get; set; }
-    public Player OwnerPlayer { get; set; }
+
+    Board board;
+    
+    public Board Board {get=>board; set
+        {
+            board = value;
+        }
+    }
+    
+    public Vector2I BoardPosition {
+        get
+        {
+            if(board != null)
+            {
+                if (board.Pieces.ContainsKey(ID))
+                {
+                    (var x, var y, var _) = board.Pieces[ID];
+
+                    return new Vector2I((int) x,(int) y);
+                }
+            }
+
+            return new Vector2I(0,0);
+        } 
+    }
+    
+    public Player OwnerPlayer { get {
+            
+            if (board != null)
+            {
+                if (board.Pieces.ContainsKey(ID))
+                {
+                    (var x, var y, var p) = board.Pieces[ID];
+
+                    return p;
+                }
+                
+            }
+
+            return Player.PLAYER1;
+        } 
+    }
 
     bool hovered;
 
@@ -56,7 +96,7 @@ public partial class Piece : Area3D
             Unhover?.Invoke(ID);
         }
     }
-    
+
     void OnChildClicked()
     {
         Clicked?.Invoke(ID);

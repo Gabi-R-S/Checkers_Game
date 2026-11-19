@@ -41,7 +41,16 @@ public partial class BoardController : Node3D
     public event Action<uint> PieceClicked;
     public event Action BoardChanged;
     BoardPosition[,] positions;
+    Dictionary<uint, Piece> pieces;
 
+    public Piece GetPieceNode(uint id)
+    {
+        if (!pieces.ContainsKey(id))
+        {
+            return null;
+        }
+        return pieces[id];
+    } 
 
     public Vector3 Centre
     {
@@ -109,16 +118,17 @@ public partial class BoardController : Node3D
 
     void PlacePieces()
     {
+        pieces= new ();
         foreach (var (pID,(x,y,p)) in board.Pieces)
         {
             var piece = piecePrefab.Instantiate<Piece>();
 
             piece.ID = pID;
-            piece.BoardPosition = new Vector2I((int) x, (int) y);   
-            piece.OwnerPlayer = p;
+            piece.Board = board;
 
-            piece.Position=GetPiecePosition((int)x,(int) y);
-            AddChild(piece);             
+            piece.Position= GetPiecePosition((int)x,(int) y);
+            AddChild(piece);
+            pieces.Add(pID,piece);             
         }
     }
 
