@@ -58,6 +58,7 @@ public partial class Master : Node3D
     public void StartGame()
     {
         board = CreateBoard();
+        
         var controller = FindChild("BoardController") as BoardController;
         if(controller != null)
         {
@@ -70,6 +71,7 @@ public partial class Master : Node3D
 
     public void EndGame()
     {
+        
         var controller = FindChild("BoardController") as BoardController;
         
         if(controller != null)

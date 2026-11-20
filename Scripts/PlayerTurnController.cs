@@ -3,6 +3,9 @@ using System;
 
 public partial class PlayerTurnController : Node3D
 {
+    public event Action TurnStart;
+    public event Action TurnEnd;
+    public event Action<int> EnergyChanged;
 
     enum State
     {
@@ -31,7 +34,9 @@ public partial class PlayerTurnController : Node3D
         {
             throw new Exception("tried to start turn with turn still in progress");
         }
-
+        
+        TurnStart?.Invoke();
+            
         state = State.SELECTING_ACTION;
         currentPlayer = player;
         currentTurnCallback = callback;
@@ -149,8 +154,11 @@ public partial class PlayerTurnController : Node3D
     void OnCommandFinished()
     {
         turnEnergy--;
+        EnergyChanged?.Invoke(turnEnergy);
         if (turnEnergy == 0)
         {
+            TurnEnd?.Invoke();
+
             state = State.NONE;
             currentTurnCallback?.Invoke();
         }
@@ -233,8 +241,7 @@ public partial class PlayerTurnController : Node3D
             {
                 if (CanKill(node))
                 {
-                    GD.Print("CAN KILL");
-                    IMaterialChanger changer = node.FindChild("Mesh") as IMaterialChanger;
+                     IMaterialChanger changer = node.FindChild("Mesh") as IMaterialChanger;
 
                     if (changer != null)
                     {
