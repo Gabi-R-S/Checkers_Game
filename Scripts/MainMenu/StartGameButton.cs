@@ -7,25 +7,40 @@ public partial class StartGameButton : Button
     string AItype = "easy";
 
     [Export]
-    PackedScene gameMasterNode;
+    Master master;
 
     public override void _Ready()
     {
         Pressed += () =>
         {
-            var master = gameMasterNode.Instantiate<Master>();
+            IGameAI ai;
 
-            var aiInitialiser = new PlayerVSaiInitialiser();
-
-            aiInitialiser.AItype = AItype;
-
-            master.StartGame(aiInitialiser);
+            if (AItype == "easy")
+            {
+                ai = new RandomAI();
+            }
+            else if(AItype == "normal")
+            {
+                ai = new RuleBasedAI();
+            }
+            else if(AItype == "hard")
+            {
+                ai = new MinMaxAI();
+            }
+            else
+            {
+                ai = new RandomAI();    
+            }
+            
+            master.Player1 = new HandControlToPlayerTurnController(master,Player.PLAYER1);
+            master.Player2 = new AIController(master,Player.PLAYER1,ai);
+            master.StartGame();
 
 
             var parent = GetParent<Node2D>();
-
+            parent.Hide();
+            
             parent.GetParent().AddChild(master);
-
             parent.GetParent().RemoveChild(parent);
 
 

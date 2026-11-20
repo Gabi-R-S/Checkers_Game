@@ -1,8 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bfgh6mefm17aa"]
+[gd_scene load_steps=9 format=3 uid="uid://bfgh6mefm17aa"]
 
 [ext_resource type="Script" uid="uid://db2nlxh2jxkn3" path="res://Scripts/PositionMaterialChanger.cs" id="1_f7lv5"]
 [ext_resource type="Material" uid="uid://ng6plgkxk502" path="res://Materials/even.tres" id="2_kb4i0"]
 [ext_resource type="Material" uid="uid://s6v72oh8a6s7" path="res://Materials/odd.tres" id="3_10d84"]
+[ext_resource type="Material" uid="uid://dlhq8flsr2nu6" path="res://Materials/highlighted.tres" id="4_sty1c"]
+[ext_resource type="Material" uid="uid://bbopyji2c0ra" path="res://Materials/hovered.tres" id="5_sty1c"]
+[ext_resource type="Material" uid="uid://bgytuafrly40f" path="res://Materials/selected.tres" id="6_yygjo"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ko7wy"]
 size = Vector3(1, 0.5, 1)
@@ -20,3 +23,6 @@ mesh = SubResource("BoxMesh_ko7wy")
 script = ExtResource("1_f7lv5")
 evenMaterial = ExtResource("2_kb4i0")
 oddMaterial = ExtResource("3_10d84")
+HighlightedMaterial = ExtResource("4_sty1c")
+HoveredMaterial = ExtResource("5_sty1c")
+SelectedMaterial = ExtResource("6_yygjo")

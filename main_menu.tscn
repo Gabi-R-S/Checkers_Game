@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://grg4bfkr8v2u"]
+[gd_scene load_steps=5 format=3 uid="uid://grg4bfkr8v2u"]
 
 [ext_resource type="Script" uid="uid://ur80pb406fr5" path="res://Scripts/MainMenu/Quit.cs" id="1_06t4h"]
 [ext_resource type="Script" uid="uid://6a8r73625oqd" path="res://Scripts/MainMenu/StartGameButton.cs" id="2_7vrkn"]
 [ext_resource type="PackedScene" uid="uid://dh3i63mat4bnu" path="res://game.tscn" id="3_fu7sn"]
+
+[sub_resource type="Theme" id="Theme_fu7sn"]
 
 [node name="Main Container" type="Node2D"]
 
@@ -17,32 +19,99 @@ render_target_update_mode = 4
 
 [node name="Master" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_fu7sn")]
 
-[node name="Node2D" type="Node2D" parent="."]
+[node name="MainMenu" type="Node2D" parent="."]
+visible = false
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Node2D"]
+[node name="RichTextLabel" type="RichTextLabel" parent="MainMenu"]
 offset_right = 1152.0
-offset_bottom = 288.0
-text = "Height Checkers "
+offset_bottom = 256.0
+theme = SubResource("Theme_fu7sn")
+theme_override_font_sizes/normal_font_size = 100
+text = "HEIGHT CHECKERS"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_group_ = true
 
-[node name="Quit" type="Button" parent="Node2D"]
-offset_left = 512.0
-offset_top = 384.0
-offset_right = 640.0
-offset_bottom = 415.0
+[node name="Quit" type="Button" parent="MainMenu"]
+offset_left = 448.0
+offset_top = 544.0
+offset_right = 704.0
+offset_bottom = 608.0
+theme_override_font_sizes/font_size = 40
 text = "Quit"
 script = ExtResource("1_06t4h")
 
-[node name="Easy Mode" type="Button" parent="Node2D"]
-offset_left = 512.0
-offset_top = 320.0
-offset_right = 640.0
-offset_bottom = 351.0
+[node name="Normal Mode" type="Button" parent="MainMenu" node_paths=PackedStringArray("master")]
+offset_left = 384.0
+offset_top = 344.0
+offset_right = 768.0
+offset_bottom = 407.0
+theme_override_font_sizes/font_size = 40
+text = "Normal Mode"
+script = ExtResource("2_7vrkn")
+master = NodePath("../../SubViewportContainer/SubViewport/Master")
+
+[node name="Hard Mode" type="Button" parent="MainMenu" node_paths=PackedStringArray("master")]
+offset_left = 384.0
+offset_top = 432.0
+offset_right = 768.0
+offset_bottom = 495.0
+theme_override_font_sizes/font_size = 40
+text = "Hard Mode"
+script = ExtResource("2_7vrkn")
+master = NodePath("../../SubViewportContainer/SubViewport/Master")
+
+[node name="Easy Mode" type="Button" parent="MainMenu" node_paths=PackedStringArray("master")]
+offset_left = 384.0
+offset_top = 256.0
+offset_right = 768.0
+offset_bottom = 319.0
+theme_override_font_sizes/font_size = 40
 text = "Easy Mode"
 script = ExtResource("2_7vrkn")
-gameMasterNode = ExtResource("3_fu7sn")
+master = NodePath("../../SubViewportContainer/SubViewport/Master")
 
-[node name="Camera2D" type="Camera2D" parent="Node2D"]
+[node name="Camera2D" type="Camera2D" parent="MainMenu"]
 anchor_mode = 0
+
+[node name="GameUI" type="Node2D" parent="."]
+
+[node name="Hearts" type="Node2D" parent="GameUI"]
+position = Vector2(208, 64)
+
+[node name="Heart_3" type="Polygon2D" parent="GameUI/Hearts"]
+position = Vector2(128, 0)
+color = Color(0.81497, 0.905268, 0.934556, 1)
+polygon = PackedVector2Array(0, -24, -16, 0, 0, 24, 16, 0)
+metadata/_edit_group_ = true
+
+[node name="Polygon2D" type="Polygon2D" parent="GameUI/Hearts/Heart_3"]
+color = Color(0.595427, 0.218943, 0.292286, 1)
+polygon = PackedVector2Array(0, -8, -8, 0, 0, 8, 8, 0)
+
+[node name="Heart_2" type="Polygon2D" parent="GameUI/Hearts"]
+position = Vector2(64, 0)
+color = Color(0.81497, 0.905268, 0.934556, 1)
+polygon = PackedVector2Array(0, -24, -16, 0, 0, 24, 16, 0)
+metadata/_edit_group_ = true
+
+[node name="Polygon2D" type="Polygon2D" parent="GameUI/Hearts/Heart_2"]
+color = Color(0.595427, 0.218943, 0.292286, 1)
+polygon = PackedVector2Array(0, -8, -8, 0, 0, 8, 8, 0)
+
+[node name="Heart_1" type="Polygon2D" parent="GameUI/Hearts"]
+color = Color(0.81497, 0.905268, 0.934556, 1)
+polygon = PackedVector2Array(0, -24, -16, 0, 0, 24, 16, 0)
+metadata/_edit_group_ = true
+
+[node name="Polygon2D" type="Polygon2D" parent="GameUI/Hearts/Heart_1"]
+color = Color(0.595427, 0.218943, 0.292286, 1)
+polygon = PackedVector2Array(0, -8, -8, 0, 0, 8, 8, 0)
+
+[node name="Label" type="Label" parent="GameUI"]
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 168.0
+offset_bottom = 87.0
+theme_override_font_sizes/font_size = 40
+text = "Moves:"

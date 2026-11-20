@@ -5,8 +5,8 @@ public partial class Master : Node3D
 {
     
     
-    TurnController Player1{get;set;}
-    TurnController Player2{get;set;}
+    public TurnController Player1{get;set;}
+    public TurnController Player2{get;set;}
 
     Player nextPlayer;
 
@@ -55,7 +55,7 @@ public partial class Master : Node3D
 
     }
 
-    public void StartGame(TurnControllerInitialiser Initialiser)
+    public void StartGame()
     {
         board = CreateBoard();
         var controller = FindChild("BoardController") as BoardController;
@@ -64,7 +64,6 @@ public partial class Master : Node3D
             controller.Board = board;
         }
 
-        (Player1, Player2) = Initialiser.Initialise(this);
 
         NewTurn();
     }
