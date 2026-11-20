@@ -4,13 +4,37 @@ using System;
 public partial class Master : Node3D
 {
     [Export]
+    TurnControllerInitialiser initialiser;
+
+    TurnController Player1{get;set;}
+    TurnController Player2{get;set;}
+
+    Player nextPlayer;
+
+
+    [Export]
     public Vector2I Size { get; private set; }
 
     [Export]
     uint numberOfRowsWithPieces = 0;
-
-
     Board board;
+
+
+    void NewTurn()
+    {
+        if(nextPlayer == Player.PLAYER1)
+        {
+            nextPlayer = Player.PLAYER2;
+            Player1?.StartTurn(NewTurn);
+        }
+        else
+        {
+            nextPlayer = Player.PLAYER1;
+            Player2?.StartTurn(NewTurn);
+        }
+    }
+
+
     Board CreateBoard()
     {
         Board board = new Board((uint)Size.X,(uint)Size.Y);
@@ -40,6 +64,10 @@ public partial class Master : Node3D
         {
             controller.Board = board;
         }
+
+        (Player1, Player2) = initialiser.Initialise(this);
+
+        NewTurn();
     }
 
    

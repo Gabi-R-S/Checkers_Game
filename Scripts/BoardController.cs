@@ -40,7 +40,7 @@ public partial class BoardController : Node3D
     public event Action<uint> PieceUnhover;
     public event Action<uint> PieceClicked;
     public event Action BoardChanged;
-    BoardPosition[,] positions;
+    BoardPosition [,] positions;
     Dictionary<uint, Piece> pieces;
 
     public Piece GetPieceNode(uint id)
@@ -51,6 +51,16 @@ public partial class BoardController : Node3D
         }
         return pieces[id];
     } 
+
+    public BoardPosition GetBoardPositionNode(uint x, uint y)
+    {
+        if(x >= board.Size.X || y >= board.Size.Y)
+        {
+            return null;
+        }
+
+        return positions[x,y];
+    }
 
     public Vector3 Centre
     {
@@ -74,6 +84,21 @@ public partial class BoardController : Node3D
     {
         PositionClicked?.Invoke(x, y);
     }
+
+    
+    void OnPieceHover(uint id)
+    {
+        PieceHover?.Invoke(id);
+    }
+    void OnPieceUnhover(uint id)
+    {
+        PieceUnhover?.Invoke(id);
+    }
+    void OnPieceClicked(uint id)
+    {
+        PieceClicked?.Invoke(id);
+    }
+
 
     Vector3 GetPosition(int x, int y)
     {
@@ -126,10 +151,25 @@ public partial class BoardController : Node3D
             piece.ID = pID;
             piece.Board = board;
 
+            piece.Hover += OnPieceHover;
+            piece.Unhover += OnPieceUnhover;
+            piece.Clicked += OnPieceClicked;
+
             piece.Position= GetPiecePosition((int)x,(int) y);
             AddChild(piece);
             pieces.Add(pID,piece);             
         }
+    }
+
+
+
+    public void Perform(TurnCommand command,Action callback)
+    {
+        if(command is IncreaseHeight heightCommand)
+        {
+            GetBoardPositionNode(heightCommand.X, heightCommand.Y)?.IncreaseHeightSteps();
+        }
+        
     }
 
 

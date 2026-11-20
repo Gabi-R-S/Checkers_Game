@@ -7,7 +7,8 @@ public partial class PlayerTurnController : Node3D
     enum State
     {
         NONE,
-        SELECTING_ACTION
+        SELECTING_ACTION,
+        PIECE_SELECTED
     }
 
 
@@ -41,21 +42,60 @@ public partial class PlayerTurnController : Node3D
 
     void OnPositionHover(uint x, uint y)
     {
+        if (state == State.SELECTING_ACTION)
+        {
+            if (!boardController.Board.ContainsPieceAt(x, y))
+            {
+                var node = boardController.GetBoardPositionNode(x, y) as IMaterialChanger;
 
+                if (node != null)
+                {
+                    node.SetMaterial(MaterialChangerMaterial.HOVERED);
+                }
+
+            }
+        }
     }
 
 
     void OnPositionUnhover(uint x, uint y)
     {
 
+        if (state == State.SELECTING_ACTION)
+        {
+
+            var node = boardController.GetBoardPositionNode(x, y) as IMaterialChanger;
+
+            if (node != null)
+            {
+                node.SetMaterial(MaterialChangerMaterial.NORMAL);
+            }
+
+        }
     }
 
     void OnPositionClicked(uint x, uint y)
     {
-
+        if (state == State.SELECTING_ACTION)
+        {
+            if (!boardController.Board.ContainsPieceAt(x, y))
+            {
+                TurnCommand command = new IncreaseHeight(x, y);
+                boardController.Perform(command, OnCommandFinished);
+            }
+        }
     }
 
+    void OnCommandFinished()
+    {
+        turnEnergy--;
+        if (turnEnergy == 0)
+        {
+            state = State.NONE;
+            currentTurnCallback?.Invoke();
+        }
 
+    }
 
 
     void OnPieceHover(uint id)
@@ -68,13 +108,13 @@ public partial class PlayerTurnController : Node3D
 
                 if (node != null)
                 {
-                    MeshMaterialChanger changer = node.FindChild("Mesh") as MeshMaterialChanger;
+                    IMaterialChanger changer = node.FindChild("Mesh") as IMaterialChanger;
 
-                    if(changer != null)
+                    if (changer != null)
                     {
                         changer.SetMaterial(MaterialChangerMaterial.HOVERED);
                     }
-                }                
+                }
             }
         }
     }
@@ -91,13 +131,13 @@ public partial class PlayerTurnController : Node3D
 
                 if (node != null)
                 {
-                    MeshMaterialChanger changer = node.FindChild("Mesh") as MeshMaterialChanger;
+                    IMaterialChanger changer = node.FindChild("Mesh") as IMaterialChanger;
 
-                    if(changer != null)
+                    if (changer != null)
                     {
                         changer.SetMaterial(MaterialChangerMaterial.NORMAL);
                     }
-                }                
+                }
             }
         }
     }

@@ -64,7 +64,7 @@ public partial class Piece : Area3D
         {
             if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left && hovered)
             {
-                OnChildClicked();
+                OnClicked();
             }
         };
 
@@ -97,7 +97,7 @@ public partial class Piece : Area3D
         }
     }
 
-    void OnChildClicked()
+    void OnClicked()
     {
         Clicked?.Invoke(ID);
     }

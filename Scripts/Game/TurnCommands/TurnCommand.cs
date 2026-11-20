@@ -1,4 +1,4 @@
-class TurnCommand
+public abstract class TurnCommand
 {
     
 }

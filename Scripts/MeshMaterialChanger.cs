@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class MeshMaterialChanger : MeshInstance3D, MaterialChanger
+public partial class MeshMaterialChanger : MeshInstance3D, IMaterialChanger
 {
     [Export]
     public Material NormalMaterial {get; protected set;}

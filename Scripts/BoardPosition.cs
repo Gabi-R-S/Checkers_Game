@@ -2,8 +2,19 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using static Godot.CollisionObject3D;
-public partial class BoardPosition : Node3D
+public partial class BoardPosition : Node3D, IMaterialChanger
 {
+   public void SetMaterial(MaterialChangerMaterial material)
+    {
+        foreach(var step in steps)
+        {
+            var materialChanger = step.FindChild("Mesh") as MeshMaterialChanger;
+            if (materialChanger != null)
+            {
+                materialChanger.SetMaterial(material);
+            }
+        }
+    }
 
     const uint MAX_HEIGHT_STEPS = 10000;
     [Export]
