@@ -1,6 +1,3 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://bnqlhr6whf02k"]
-
-[ext_resource type="Script" uid="uid://cqcaar37bderf" path="res://Scripts/Game/TurnControllers/TestInitialiser.cs" id="1_1iigb"]
+[gd_resource type="Resource" format=3 uid="uid://bnqlhr6whf02k"]
 
 [resource]
-script = ExtResource("1_1iigb")

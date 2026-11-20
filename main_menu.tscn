@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://grg4bfkr8v2u"]
+
+[ext_resource type="Script" uid="uid://ur80pb406fr5" path="res://Scripts/MainMenu/Quit.cs" id="1_06t4h"]
+[ext_resource type="Script" uid="uid://6a8r73625oqd" path="res://Scripts/MainMenu/StartGameButton.cs" id="2_7vrkn"]
+
+[node name="Main Menu" type="Node2D"]
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_right = 1152.0
+offset_bottom = 288.0
+text = "Height Checkers "
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_group_ = true
+
+[node name="Quit" type="Button" parent="."]
+offset_left = 512.0
+offset_top = 384.0
+offset_right = 640.0
+offset_bottom = 415.0
+text = "Quit"
+script = ExtResource("1_06t4h")
+
+[node name="Easy Mode" type="Button" parent="."]
+offset_left = 512.0
+offset_top = 320.0
+offset_right = 640.0
+offset_bottom = 351.0
+text = "Easy Mode"
+script = ExtResource("2_7vrkn")

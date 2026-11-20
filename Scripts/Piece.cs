@@ -37,10 +37,9 @@ public partial class Piece : Area3D
                 if (board.Pieces.ContainsKey(ID))
                 {
                     (var x, var y, var p) = board.Pieces[ID];
-
+                    GD.Print(p);
                     return p;
                 }
-                
             }
 
             return Player.PLAYER1;

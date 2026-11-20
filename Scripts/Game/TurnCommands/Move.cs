@@ -2,9 +2,15 @@
 
 using Godot;
 
-class Move:TurnCommand
+class Move : TurnCommand
 {
-int PieceID {get; set;}
-Vector2I Origin {get; set;}
-Vector2I Target {get; set;}
+    public uint PieceID { get; private set; }
+    public uint X { get; private set; }
+    public uint Y { get; private set; }
+    public Move(uint pieceID, uint x, uint y)
+    {
+        PieceID = pieceID;
+        X = x;
+        Y = y;
+    }
 }

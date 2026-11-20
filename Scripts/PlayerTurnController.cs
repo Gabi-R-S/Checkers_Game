@@ -8,7 +8,8 @@ public partial class PlayerTurnController : Node3D
     {
         NONE,
         SELECTING_ACTION,
-        PIECE_SELECTED
+        PIECE_SELECTED,
+        ANIMATING
     }
 
 
@@ -18,12 +19,11 @@ public partial class PlayerTurnController : Node3D
     Action currentTurnCallback = null;
     Player currentPlayer;
 
-    [Export]
-    int maxTurnEnergy = 0;
     int turnEnergy = 0;
 
     State state;
 
+    Piece selectedPiece;
 
     public void StartTurn(Player player, Action callback = null)
     {
@@ -35,7 +35,7 @@ public partial class PlayerTurnController : Node3D
         state = State.SELECTING_ACTION;
         currentPlayer = player;
         currentTurnCallback = callback;
-        turnEnergy = maxTurnEnergy;
+        turnEnergy = Globals.MAX_TURN_ENERGY;
 
 
     }
@@ -55,6 +55,21 @@ public partial class PlayerTurnController : Node3D
 
             }
         }
+        else if (state == State.PIECE_SELECTED)
+        {
+
+            if (CanMoveTo(x, y))
+            {
+                var node = boardController.GetBoardPositionNode(x, y);
+
+
+                if (node != null)
+                {
+                    node.SetMaterial(MaterialChangerMaterial.HOVERED);
+                }
+            }
+
+        }
     }
 
 
@@ -66,25 +81,70 @@ public partial class PlayerTurnController : Node3D
 
             var node = boardController.GetBoardPositionNode(x, y) as IMaterialChanger;
 
-            if (node != null)
-            {
-                node.SetMaterial(MaterialChangerMaterial.NORMAL);
-            }
+            node?.SetMaterial(MaterialChangerMaterial.NORMAL);
 
         }
+        else if (state == State.PIECE_SELECTED)
+        {
+
+            if (CanMoveTo(x, y))
+            {
+                var node = boardController.GetBoardPositionNode(x, y);
+
+                node?.SetMaterial(MaterialChangerMaterial.HIGHLIGHTED);
+            }
+
+
+        }
+
     }
 
     void OnPositionClicked(uint x, uint y)
     {
         if (state == State.SELECTING_ACTION)
         {
-            if (!boardController.Board.ContainsPieceAt(x, y))
+            if (!boardController.Board.IsThereAPieceInPosition(x, y))
             {
                 TurnCommand command = new IncreaseHeight(x, y);
-                boardController.Perform(command, OnCommandFinished);
+                IssueCommand(command);
+            }
+        }
+        else if (state == State.PIECE_SELECTED)
+        {
+            if (CanMoveTo(x, y))
+            {
+                Move command = new Move(selectedPiece.ID, x, y);
+                IssueCommand(command);
             }
         }
     }
+
+    void ReturnMaterialsToNormal()
+    {
+        foreach (var piece in boardController.Pieces.Values)
+        {
+            IMaterialChanger changer = piece.FindChild("Mesh") as IMaterialChanger;
+
+            if (changer != null)
+            {
+                changer.SetMaterial(MaterialChangerMaterial.NORMAL);
+            }
+
+        }
+        foreach (var position in boardController.Positions)
+        {
+            position.SetMaterial(MaterialChangerMaterial.NORMAL);
+        }
+
+    }
+    void IssueCommand(TurnCommand command)
+    {
+        ReturnMaterialsToNormal();
+        state = State.ANIMATING;
+        boardController.Perform(command, OnCommandFinished);
+    }
+
+
 
     void OnCommandFinished()
     {
@@ -93,6 +153,10 @@ public partial class PlayerTurnController : Node3D
         {
             state = State.NONE;
             currentTurnCallback?.Invoke();
+        }
+        else
+        {
+            state = State.SELECTING_ACTION;
         }
 
     }
@@ -117,6 +181,26 @@ public partial class PlayerTurnController : Node3D
                 }
             }
         }
+        else if (state == State.PIECE_SELECTED)
+        {
+
+            var node = boardController.GetPieceNode(id);
+
+
+            if (node != null)
+            {
+                if (CanKill(node))
+                {
+                    IMaterialChanger changer = node.FindChild("Mesh") as IMaterialChanger;
+
+                    if (changer != null)
+                    {
+                        changer.SetMaterial(MaterialChangerMaterial.HOVERED);
+                    }
+                }
+            }
+        }
+
     }
 
 
@@ -140,11 +224,117 @@ public partial class PlayerTurnController : Node3D
                 }
             }
         }
+        else if (state == State.PIECE_SELECTED)
+        {
+            var node = boardController.GetPieceNode(id);
+
+
+            if (node != null)
+            {
+                if (CanKill(node))
+                {
+                    GD.Print("CAN KILL");
+                    IMaterialChanger changer = node.FindChild("Mesh") as IMaterialChanger;
+
+                    if (changer != null)
+                    {
+                        changer.SetMaterial(MaterialChangerMaterial.HOVERED);
+                    }
+                }
+            }
+
+        }
+
     }
 
+    bool CanKill(Piece piece)
+    {
+        return boardController.Board.CanKill(selectedPiece.ID,piece.ID); 
+    }
+
+    bool CanMoveTo(uint x, uint y)
+    {
+        return boardController.Board.CanMoveTo(selectedPiece.ID,x,y); 
+    }
+    void HighlightSurroundingPositions()
+    {
+        var pos = selectedPiece.BoardPosition;
+
+        if (CanMoveTo((uint)(pos.X - 1), (uint)(pos.Y)))
+        {
+            boardController.GetBoardPositionNode((uint)(pos.X - 1), (uint)(pos.Y))?.SetMaterial(MaterialChangerMaterial.HIGHLIGHTED);
+        }
+
+        if (CanMoveTo((uint)(pos.X + 1), (uint)(pos.Y)))
+        {
+            boardController.GetBoardPositionNode((uint)(pos.X + 1), (uint)(pos.Y))?.SetMaterial(MaterialChangerMaterial.HIGHLIGHTED);
+        }
+
+        if (CanMoveTo((uint)(pos.X), (uint)(pos.Y + 1)))
+        {
+            boardController.GetBoardPositionNode((uint)(pos.X), (uint)(pos.Y + 1))?.SetMaterial(MaterialChangerMaterial.HIGHLIGHTED);
+        }
+
+        if (CanMoveTo((uint)(pos.X), (uint)(pos.Y + 1)))
+        {
+            boardController.GetBoardPositionNode((uint)(pos.X), (uint)(pos.Y - 1))?.SetMaterial(MaterialChangerMaterial.HIGHLIGHTED);
+        }
+
+        foreach (var piece in boardController.Pieces.Values)
+        {
+            if (CanKill(piece))
+            {
+                IMaterialChanger changer = piece.FindChild("Mesh") as IMaterialChanger;
+
+                if (changer != null)
+                {
+                    changer.SetMaterial(MaterialChangerMaterial.HIGHLIGHTED);
+                }
+            }
+
+        }
+    }
     void OnPieceClicked(uint id)
     {
+        if (state == State.SELECTING_ACTION)
+        {
+            if (boardController.Board.IsPieceOfType(id, currentPlayer))
+            {
+                var node = boardController.GetPieceNode(id);
 
+                if (node != null)
+                {
+                    IMaterialChanger changer = node.FindChild("Mesh") as IMaterialChanger;
+
+                    if (changer != null)
+                    {
+                        changer.SetMaterial(MaterialChangerMaterial.SELECTED);
+                    }
+                    state = State.PIECE_SELECTED;
+                    selectedPiece = node;
+                    HighlightSurroundingPositions();
+                }
+            }
+        }
+        else if (state == State.PIECE_SELECTED)
+        {
+            var node = boardController.GetPieceNode(id);
+
+
+            if (node != null)
+            {
+                if (CanKill(node))
+                {
+                    IssueCommand(new Kill(selectedPiece.ID, id));
+                }
+                else if (node == selectedPiece)
+                {
+                    ReturnMaterialsToNormal();
+                    state = State.SELECTING_ACTION;
+                }
+            }
+
+        }
     }
 
     public override void _Ready()

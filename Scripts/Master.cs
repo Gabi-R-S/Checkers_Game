@@ -4,7 +4,7 @@ using System;
 public partial class Master : Node3D
 {
     [Export]
-    TurnControllerInitialiser initialiser;
+    public TurnControllerInitialiser Initialiser {get; set;}
 
     TurnController Player1{get;set;}
     TurnController Player2{get;set;}
@@ -65,7 +65,7 @@ public partial class Master : Node3D
             controller.Board = board;
         }
 
-        (Player1, Player2) = initialiser.Initialise(this);
+        (Player1, Player2) = Initialiser.Initialise(this);
 
         NewTurn();
     }
