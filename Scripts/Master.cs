@@ -3,9 +3,8 @@ using System;
 
 public partial class Master : Node3D
 {
-    [Export]
-    public TurnControllerInitialiser Initialiser {get; set;}
-
+    
+    
     TurnController Player1{get;set;}
     TurnController Player2{get;set;}
 
@@ -56,10 +55,10 @@ public partial class Master : Node3D
 
     }
 
-    public override void _Ready()
+    public void StartGame(TurnControllerInitialiser Initialiser)
     {
         board = CreateBoard();
-        var controller = GetChildOrNull<BoardController>(0);
+        var controller = FindChild("BoardController") as BoardController;
         if(controller != null)
         {
             controller.Board = board;
@@ -70,5 +69,15 @@ public partial class Master : Node3D
         NewTurn();
     }
 
+    public void EndGame()
+    {
+        var controller = FindChild("BoardController") as BoardController;
+        
+        if(controller != null)
+        {
+            controller.Board = null;
+        }
+        
+    }
    
 }

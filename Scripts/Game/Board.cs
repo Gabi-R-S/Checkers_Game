@@ -45,7 +45,6 @@ public class Board
 
     public bool IsThereAPieceInPosition(uint x, uint y)
     {
-
         if (x >= w || y >= h)
         {
             return false;
@@ -64,18 +63,7 @@ public class Board
 
     public Dictionary<uint, (uint, uint, Player)> Pieces { get; private set; } = new Dictionary<uint, (uint, uint, Player)>();
 
-    public bool ContainsPieceAt(uint x, uint y)
-    {
-        foreach (var (X, Y, p) in Pieces.Values)
-        {
-            if (x == X && y == Y)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
+  
     public bool IsPieceOfType(uint id, Player type)
     {
         if (!Pieces.ContainsKey(id))
@@ -110,7 +98,11 @@ public class Board
         }
 
         (var px, var py, var p) = Pieces[piece];
-        return IsInsideBoard(x, y) && (Math.Abs(x - px) + Math.Abs(y - py) == 1) && !IsThereAPieceInPosition(x, y) && heights[px, py] - heights[x, y] == 1;
+
+        return IsInsideBoard(x, y) &&
+        (Math.Abs((int)x - (int)px) + Math.Abs((int)y - (int)py) == 1) &&
+        !IsThereAPieceInPosition(x, y) &&
+        Math.Abs((int)heights[px, py] - (int)heights[x, y]) <= 1;
     }
 
     public bool CanKill(uint piece, uint target)
@@ -122,7 +114,9 @@ public class Board
 
         (var px, var py, var pp) = Pieces[piece];
         (var tx, var ty, var tp) = Pieces[piece];
-        return pp != tp && (Math.Abs(tx - px) + Math.Abs(ty - py) == 1) && heights[px, py] - heights[tx, ty] == 1;
+        return pp != tp && 
+        (Math.Abs((int)tx - (int)px) + Math.Abs((int)ty - (int)py) == 1) && 
+        heights[px, py] - heights[tx, ty] == 1;
     }
 
     public List<TurnCommand> GetAllValidCommands(Player player)
@@ -134,7 +128,7 @@ public class Board
 
             for (uint y = 0; y < h; y++)
             {
-                if (IsThereAPieceInPosition(x, y))
+                if (!IsThereAPieceInPosition(x, y))
                 {
                     commands.Add(new IncreaseHeight(x, y));
                 }
@@ -179,6 +173,15 @@ public class Board
         return commands;
     }
 
+    (uint, uint) GetPiecePosition(uint id)
+    {
+        if (!Pieces.ContainsKey(id))
+        {
+            return (0, 0);
+        }
+        (var x, var y, var _) = Pieces[id];
+        return (x, y);
+    }
 
     public Board Clone()
     {
@@ -201,5 +204,25 @@ public class Board
         }
 
         return newBoard;
+    }
+
+    public void Apply(TurnCommand command)
+    {
+        if (command is IncreaseHeight heightCommand)
+        {
+            IncreaseHeightAt(heightCommand.X, heightCommand.Y);
+        }
+        else if (command is Move move)
+        {
+            MovePiece(move.PieceID, move.X, move.Y);
+        }
+        else if (command is Kill kill)
+        {
+            (var x, var y) = GetPiecePosition(kill.PieceID);
+            KillPiece(kill.TargetID);
+            MovePiece(kill.PieceID, x, y);
+
+        }
+
     }
 }

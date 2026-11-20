@@ -19,16 +19,16 @@ public partial class StartGameButton : Button
 
             aiInitialiser.AItype = AItype;
 
-            master.Initialiser = aiInitialiser;
+            master.StartGame(aiInitialiser);
 
-            
+
             var parent = GetParent<Node2D>();
 
             parent.GetParent().AddChild(master);
 
             parent.GetParent().RemoveChild(parent);
 
-            
+
         };
     }
 

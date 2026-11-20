@@ -44,7 +44,7 @@ public partial class PlayerTurnController : Node3D
     {
         if (state == State.SELECTING_ACTION)
         {
-            if (!boardController.Board.ContainsPieceAt(x, y))
+            if (!boardController.Board.IsThereAPieceInPosition(x, y))
             {
                 var node = boardController.GetBoardPositionNode(x, y) as IMaterialChanger;
 

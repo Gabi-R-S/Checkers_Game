@@ -18,6 +18,7 @@ public partial class PlayerVSaiInitialiser : TurnControllerInitialiser
         }
 
         HandControlToPlayerTurnController p1 = new HandControlToPlayerTurnController(master, Player.PLAYER1);
+        
         var p2 = new AIController(master, Player.PLAYER2, gameAI);
 
         return (p1, p2);

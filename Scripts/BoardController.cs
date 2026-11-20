@@ -29,10 +29,13 @@ public partial class BoardController : Node3D
 
             board = value;
 
-            CreateBoard();
-            PlacePieces();
+            if (board != null)
+            {
+                CreateBoard();
+                PlacePieces();
+            }
 
-            BoardChanged();
+            BoardChanged?.Invoke();
         }
     }
 
@@ -169,35 +172,36 @@ public partial class BoardController : Node3D
     {
         if (command is IncreaseHeight heightCommand)
         {
-            board.IncreaseHeightAt(heightCommand.X, heightCommand.Y);
+            board.Apply(command);
+
             GetBoardPositionNode(heightCommand.X, heightCommand.Y)?.IncreaseHeightSteps();
             callback?.Invoke();
         }
         else if (command is Move move)
         {
-            board.MovePiece(move.PieceID, move.X, move.Y);
-            var node = GetPieceNode(move.PieceID);
+            board.Apply(command);
 
+            var node = GetPieceNode(move.PieceID);
             if (node != null)
             {
                 node.Position = GetPiecePosition(move.X, move.Y);
             }
 
-            callback();
+            callback?.Invoke();
         }
         else if (command is Kill kill)
         {
             var node = GetPieceNode(kill.TargetID);
             var target = node.BoardPosition;
+            board.Apply(command);
 
-            board.KillPiece(kill.TargetID);
+
             if (node != null)
             {
                 RemoveChild(node);
             }
 
-            
-            board.MovePiece(kill.PieceID, (uint)target.X, (uint)target.Y);
+
             node = GetPieceNode(kill.PieceID);
 
             if (node != null)
@@ -205,7 +209,7 @@ public partial class BoardController : Node3D
                 node.Position = GetPiecePosition((uint)target.X, (uint)target.Y);
             }
 
-            callback();
+            callback.Invoke();
         }
 
     }
