@@ -24,7 +24,7 @@ public partial class PlayerTurnController : Node3D
 
     int turnEnergy = 0;
 
-    State state;
+    State state = State.NONE;
 
     Piece selectedPiece;
 
@@ -41,6 +41,9 @@ public partial class PlayerTurnController : Node3D
         currentPlayer = player;
         currentTurnCallback = callback;
         turnEnergy = Globals.MAX_TURN_ENERGY;
+
+        // Reset any previous piece selection
+        selectedPiece = null;
 
 
     }
@@ -288,7 +291,7 @@ public partial class PlayerTurnController : Node3D
             boardController.GetBoardPositionNode((uint)(pos.X), (uint)(pos.Y + 1))?.SetMaterial(MaterialChangerMaterial.HIGHLIGHTED);
         }
 
-        if (CanMoveTo((uint)(pos.X), (uint)(pos.Y + 1)))
+        if (CanMoveTo((uint)(pos.X), (uint)(pos.Y - 1)))
         {
             boardController.GetBoardPositionNode((uint)(pos.X), (uint)(pos.Y - 1))?.SetMaterial(MaterialChangerMaterial.HIGHLIGHTED);
         }

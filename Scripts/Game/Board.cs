@@ -221,7 +221,6 @@ public class Board
             (var x, var y) = GetPiecePosition(kill.PieceID);
             KillPiece(kill.TargetID);
             MovePiece(kill.PieceID, x, y);
-
         }
 
     }
