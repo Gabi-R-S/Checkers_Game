@@ -124,6 +124,16 @@ public partial class PlayerTurnController : Node3D
                 Move command = new Move(selectedPiece.ID, x, y);
                 IssueCommand(command);
             }
+            else
+            {
+                ReturnMaterialsToNormal();
+                state = State.SELECTING_ACTION;
+                selectedPiece = null;
+                if (!boardController.Board.IsThereAPieceInPosition(x, y))
+                {
+                    (boardController.GetBoardPositionNode(x, y) as IMaterialChanger)?.SetMaterial(MaterialChangerMaterial.HOVERED);
+                }
+            }
         }
     }
 
@@ -347,6 +357,18 @@ public partial class PlayerTurnController : Node3D
                 {
                     ReturnMaterialsToNormal();
                     state = State.SELECTING_ACTION;
+                    selectedPiece = null;
+                }
+                else if (boardController.Board.IsPieceOfType(id, currentPlayer))
+                {
+                    ReturnMaterialsToNormal();
+                    IMaterialChanger changer = node.FindChild("Mesh") as IMaterialChanger;
+                    if (changer != null)
+                    {
+                        changer.SetMaterial(MaterialChangerMaterial.SELECTED);
+                    }
+                    selectedPiece = node;
+                    HighlightSurroundingPositions();
                 }
             }
 

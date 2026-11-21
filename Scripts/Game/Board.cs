@@ -218,9 +218,10 @@ public class Board
         }
         else if (command is Kill kill)
         {
-            (var x, var y) = GetPiecePosition(kill.PieceID);
+            // Move the killer piece to the target's position after removing the target
+            (var tx, var ty) = GetPiecePosition(kill.TargetID);
             KillPiece(kill.TargetID);
-            MovePiece(kill.PieceID, x, y);
+            MovePiece(kill.PieceID, tx, ty);
         }
 
     }

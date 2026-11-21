@@ -119,7 +119,7 @@ public partial class BoardController : Node3D
 
     Vector3 GetPiecePosition(uint x, uint y)
     {
-        int height = x > 0 && y > 0 && x < board.Size.X && y < board.Size.Y ? (int)Positions[x, y].HeightSteps : 1;
+        int height = x < board.Size.X && y < board.Size.Y && Positions[x, y] != null ? (int)Positions[x, y].HeightSteps : 1;
         return new Vector3((x - (board.Size.X - 1) / 2.0f) * Positionspacing,
             (height - 0.5f) * pieceHeight,
             (y - (board.Size.Y - 1) / 2.0f) * Positionspacing);

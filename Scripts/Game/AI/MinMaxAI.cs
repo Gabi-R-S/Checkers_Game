@@ -9,7 +9,7 @@ public class MinMaxAI : IGameAI
     private const float WIN_VALUE = 10000f;
     private const float INF = float.MaxValue;
 
-    public int MaxDepth { get; set; } = 3;
+    public int MaxDepth { get; set; } = 40;
 
     private enum BoundType
     {

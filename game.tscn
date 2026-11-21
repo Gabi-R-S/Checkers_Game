@@ -14,8 +14,8 @@ numberOfRowsWithPieces = 2
 [node name="BoardController" parent="." instance=ExtResource("1_80nbo")]
 piecePrefab = ExtResource("2_feb5d")
 pieceHeight = 0.5
-movementDuration = 0.4
-disappearDuration = 0.3
+movementDuration = 0.2
+disappearDuration = 0.1
 
 [node name="BoardCamera" parent="." node_paths=PackedStringArray("controller") instance=ExtResource("2_e2o6t")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 20)

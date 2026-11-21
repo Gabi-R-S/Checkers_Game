@@ -34,6 +34,7 @@ public partial class GameOverUI : Node2D
         {
             returnButton.Pressed += () =>
             {
+                master.EndGame();
                 returnButton.Hide();
                 youWin.Hide();
                 gameOver.Hide();

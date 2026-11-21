@@ -102,7 +102,7 @@ public partial class BoardPosition : Node3D, IMaterialChanger
                     var exited = () => OnMouseExited(child);
                     InputEventEventHandler clicked = (a, @event, c, d, e) =>
                     {
-                        if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left && currentHovered.Count > 0)
+                        if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left)
                         {
                             OnChildClicked();
                         }
@@ -128,14 +128,14 @@ public partial class BoardPosition : Node3D, IMaterialChanger
 
     void OnMouseEntered(Node3D node)
     {
-        if (currentHovered.Add(node))
+        if (currentHovered.Add(node) && currentHovered.Count == 1)
         {
             Hover?.Invoke(X, Y);
         }
     }
     void OnMouseExited(Node3D node)
     {
-        if (currentHovered.Remove(node))
+        if (currentHovered.Remove(node) && currentHovered.Count == 0)
         {
             Unhover?.Invoke(X, Y);
         }
