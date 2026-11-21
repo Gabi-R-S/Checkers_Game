@@ -37,7 +37,7 @@ public partial class CameraController : Camera3D
         maxRadius = 2.5f * currentRadius;
 
 
-        Position = new Vector3(0, currentRadius*0.8f, -currentRadius).Normalized() * currentRadius;
+        Position = new Vector3(0, currentRadius*0.8f, currentRadius).Normalized() * currentRadius;
 
         LookAt(Target);
     }

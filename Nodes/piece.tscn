@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://dxs7u4hkh8v8n" path="res://Scripts/Piece.cs" id="1_6ppfu"]
 [ext_resource type="Script" uid="uid://clqh1de4go1vh" path="res://Scripts/PieceMaterialChanger.cs" id="2_0m0wf"]
-[ext_resource type="Material" uid="uid://bop0s38st450c" path="res://Materials/player1Piece.tres" id="4_qvr3m"]
-[ext_resource type="Material" uid="uid://bop0s38st450c" path="res://Materials/player2Piece.tres" id="4_r7jgx"]
+[ext_resource type="Material" uid="uid://b6wgm8tnwojdd" path="res://Materials/Player1PieceThatWorks.tres" id="3_r7jgx"]
+[ext_resource type="Material" uid="uid://cs20la8h2bkte" path="res://Materials/Player2PieceThatWorks.tres" id="4_r7jgx"]
 [ext_resource type="Material" uid="uid://dlhq8flsr2nu6" path="res://Materials/highlighted.tres" id="5_r7jgx"]
 [ext_resource type="Material" uid="uid://bgytuafrly40f" path="res://Materials/selected.tres" id="6_qvr3m"]
 [ext_resource type="Material" uid="uid://bbopyji2c0ra" path="res://Materials/hovered.tres" id="6_r7jgx"]
@@ -28,7 +28,7 @@ shape = SubResource("CylinderShape3D_o63np")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, 0)
 mesh = SubResource("CylinderMesh_6ppfu")
 script = ExtResource("2_0m0wf")
-player1Material = ExtResource("4_qvr3m")
+player1Material = ExtResource("3_r7jgx")
 player2Material = ExtResource("4_r7jgx")
 HighlightedMaterial = ExtResource("5_r7jgx")
 HoveredMaterial = ExtResource("6_r7jgx")

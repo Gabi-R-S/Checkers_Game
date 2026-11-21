@@ -66,10 +66,12 @@ public partial class Master : Node3D
         {
             for (uint x = i % 2; x < board.Size.X; x += 2)
             {
-                board.Pieces.Add(pID, (x, i, Player.PLAYER1));
+                // Place Player 2 pieces on top rows
+                board.Pieces.Add(pID, (x, i, Player.PLAYER2));
                 pID++;
 
-                board.Pieces.Add(pID, (x, (uint)(board.Size.Y - 1 - i), Player.PLAYER2));
+                // Place Player 1 pieces on bottom rows
+                board.Pieces.Add(pID, (x, (uint)(board.Size.Y - 1 - i), Player.PLAYER1));
                 pID++;
             }
         }
