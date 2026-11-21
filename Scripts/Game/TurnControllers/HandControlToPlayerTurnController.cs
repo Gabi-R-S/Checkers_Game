@@ -7,7 +7,6 @@ public class HandControlToPlayerTurnController:TurnController
 
     public HandControlToPlayerTurnController(Master master, Player owner): base(owner)
     {
-
         TurnControllerNode = master.FindChild("PlayerTurnController") as PlayerTurnController;
     }
 

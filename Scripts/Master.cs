@@ -3,10 +3,10 @@ using System;
 
 public partial class Master : Node3D
 {
-    
-    
-    public TurnController Player1{get;set;}
-    public TurnController Player2{get;set;}
+
+
+    public TurnController Player1 { get; set; }
+    public TurnController Player2 { get; set; }
 
     Player nextPlayer;
 
@@ -19,10 +19,33 @@ public partial class Master : Node3D
     Board board;
 
 
+    public event Action<Player> GameShouldEnd; //returns who won
+    bool ShouldEndGame() // game ends when the next player can't move a piece
+    {
+        var commands = board.GetAllValidCommands(nextPlayer);
+
+        foreach (var command in commands)
+        {
+            if (command is Move || command is Kill)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     void NewTurn()
     {
-        if(nextPlayer == Player.PLAYER1)
+        if (ShouldEndGame())
         {
+            GameShouldEnd?.Invoke(nextPlayer == Player.PLAYER1 ? Player.PLAYER2 : Player.PLAYER1);
+            return;
+        }
+
+        if (nextPlayer == Player.PLAYER1)
+        {
+
             nextPlayer = Player.PLAYER2;
             Player1?.StartTurn(NewTurn);
         }
@@ -36,21 +59,21 @@ public partial class Master : Node3D
 
     Board CreateBoard()
     {
-        Board board = new Board((uint)Size.X,(uint)Size.Y);
+        Board board = new Board((uint)Size.X, (uint)Size.Y);
 
-        uint pID=0;
+        uint pID = 0;
         for (uint i = 0; i < numberOfRowsWithPieces && i < board.Size.Y / 2; i++)
         {
             for (uint x = i % 2; x < board.Size.X; x += 2)
             {
-                board.Pieces.Add(pID,(x, i, Player.PLAYER1));
-                pID ++;
-                
-                board.Pieces.Add(pID,(x, (uint)(board.Size.Y - 1 - i), Player.PLAYER2));
-                pID ++;     
+                board.Pieces.Add(pID, (x, i, Player.PLAYER1));
+                pID++;
+
+                board.Pieces.Add(pID, (x, (uint)(board.Size.Y - 1 - i), Player.PLAYER2));
+                pID++;
             }
         }
-        
+
         return board;
 
     }
@@ -58,9 +81,9 @@ public partial class Master : Node3D
     public void StartGame()
     {
         board = CreateBoard();
-        
+
         var controller = FindChild("BoardController") as BoardController;
-        if(controller != null)
+        if (controller != null)
         {
             controller.Board = board;
         }
@@ -71,14 +94,14 @@ public partial class Master : Node3D
 
     public void EndGame()
     {
-        
+
         var controller = FindChild("BoardController") as BoardController;
-        
-        if(controller != null)
+
+        if (controller != null)
         {
             controller.Board = null;
         }
-        
+
     }
-   
+
 }

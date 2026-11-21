@@ -113,10 +113,10 @@ public class Board
         }
 
         (var px, var py, var pp) = Pieces[piece];
-        (var tx, var ty, var tp) = Pieces[piece];
+        (var tx, var ty, var tp) = Pieces[target];
         return pp != tp && 
         (Math.Abs((int)tx - (int)px) + Math.Abs((int)ty - (int)py) == 1) && 
-        heights[px, py] - heights[tx, ty] == 1;
+        heights[px, py] == heights[tx, ty] + 1;
     }
 
     public List<TurnCommand> GetAllValidCommands(Player player)

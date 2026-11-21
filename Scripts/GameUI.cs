@@ -49,6 +49,15 @@ public partial class GameUI : Node2D
             }
 
         };
+
+
+        var button = FindChild("SkipTurn") as Button;
+        if (button != null)
+        {
+            var turnController = master.FindChild("PlayerTurnController") as PlayerTurnController;
+            button.Pressed += turnController.EndTurn;
+            
+        }
     }
 
 }

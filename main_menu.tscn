@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://grg4bfkr8v2u"]
+[gd_scene load_steps=7 format=3 uid="uid://grg4bfkr8v2u"]
 
 [ext_resource type="Script" uid="uid://ur80pb406fr5" path="res://Scripts/MainMenu/Quit.cs" id="1_06t4h"]
 [ext_resource type="Script" uid="uid://6a8r73625oqd" path="res://Scripts/MainMenu/StartGameButton.cs" id="2_7vrkn"]
 [ext_resource type="PackedScene" uid="uid://dh3i63mat4bnu" path="res://game.tscn" id="3_fu7sn"]
 [ext_resource type="Script" uid="uid://dhsl6o1py28fb" path="res://Scripts/GameUI.cs" id="4_jix8l"]
+[ext_resource type="Script" uid="uid://cbumtq2ufwiby" path="res://Scripts/GameOverUI.cs" id="5_glbon"]
 
 [sub_resource type="Theme" id="Theme_fu7sn"]
 
@@ -12,15 +13,22 @@
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 offset_right = 1152.0
 offset_bottom = 648.0
+stretch = true
+mouse_target = true
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
 handle_input_locally = false
+physics_object_picking = true
+physics_object_picking_sort = true
+physics_object_picking_first_only = true
 size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
 [node name="Master" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_fu7sn")]
+visible = false
 
 [node name="MainMenu" type="Node2D" parent="."]
+visible = false
 
 [node name="RichTextLabel" type="RichTextLabel" parent="MainMenu"]
 offset_right = 1152.0
@@ -114,10 +122,50 @@ metadata/_edit_group_ = true
 color = Color(0.595427, 0.218943, 0.292286, 1)
 polygon = PackedVector2Array(0, -8, -8, 0, 0, 8, 8, 0)
 
-[node name="Label" type="Label" parent="GameUI"]
+[node name="HeartLabel" type="Label" parent="GameUI"]
 offset_left = 32.0
 offset_top = 32.0
 offset_right = 168.0
 offset_bottom = 87.0
 theme_override_font_sizes/font_size = 40
 text = "Moves:"
+
+[node name="SkipTurn" type="Button" parent="GameUI"]
+offset_left = 936.0
+offset_top = 24.0
+offset_right = 1128.0
+offset_bottom = 87.0
+theme_override_font_sizes/font_size = 40
+text = "Skip Turn"
+
+[node name="GameOverUI" type="Node2D" parent="."]
+script = ExtResource("5_glbon")
+
+[node name="GameOver" type="Label" parent="GameOverUI"]
+visible = false
+offset_right = 1152.0
+offset_bottom = 448.0
+theme_override_font_sizes/font_size = 160
+text = "GAME OVER!"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="YouWon" type="Label" parent="GameOverUI"]
+visible = false
+offset_right = 1152.0
+offset_bottom = 448.0
+theme_override_font_sizes/font_size = 160
+text = "YOU WON!"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="ReturnButton" type="Button" parent="GameOverUI"]
+visible = false
+offset_left = 320.0
+offset_top = 448.0
+offset_right = 832.0
+offset_bottom = 511.0
+theme_override_font_sizes/font_size = 40
+text = "Back To Main Menu"

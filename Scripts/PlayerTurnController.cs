@@ -34,9 +34,9 @@ public partial class PlayerTurnController : Node3D
         {
             throw new Exception("tried to start turn with turn still in progress");
         }
-        
+
         TurnStart?.Invoke();
-            
+
         state = State.SELECTING_ACTION;
         currentPlayer = player;
         currentTurnCallback = callback;
@@ -150,6 +150,15 @@ public partial class PlayerTurnController : Node3D
     }
 
 
+    public void EndTurn()
+    {
+        if (state != State.NONE)
+        {
+            TurnEnd?.Invoke();
+            state = State.NONE;
+            currentTurnCallback?.Invoke();
+        }
+    }
 
     void OnCommandFinished()
     {
@@ -157,10 +166,7 @@ public partial class PlayerTurnController : Node3D
         EnergyChanged?.Invoke(turnEnergy);
         if (turnEnergy == 0)
         {
-            TurnEnd?.Invoke();
-
-            state = State.NONE;
-            currentTurnCallback?.Invoke();
+            EndTurn();
         }
         else
         {
@@ -241,7 +247,7 @@ public partial class PlayerTurnController : Node3D
             {
                 if (CanKill(node))
                 {
-                     IMaterialChanger changer = node.FindChild("Mesh") as IMaterialChanger;
+                    IMaterialChanger changer = node.FindChild("Mesh") as IMaterialChanger;
 
                     if (changer != null)
                     {
@@ -256,12 +262,12 @@ public partial class PlayerTurnController : Node3D
 
     bool CanKill(Piece piece)
     {
-        return boardController.Board.CanKill(selectedPiece.ID,piece.ID); 
+        return boardController.Board.CanKill(selectedPiece.ID, piece.ID);
     }
 
     bool CanMoveTo(uint x, uint y)
     {
-        return boardController.Board.CanMoveTo(selectedPiece.ID,x,y); 
+        return boardController.Board.CanMoveTo(selectedPiece.ID, x, y);
     }
     void HighlightSurroundingPositions()
     {

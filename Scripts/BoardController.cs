@@ -25,6 +25,7 @@ public partial class BoardController : Node3D
             foreach (var child in GetChildren())
             {
                 RemoveChild(child);
+                child.QueueFree();
             }
 
             board = value;
@@ -192,13 +193,20 @@ public partial class BoardController : Node3D
         else if (command is Kill kill)
         {
             var node = GetPieceNode(kill.TargetID);
-            var target = node.BoardPosition;
+
+            Vector2I target = Vector2I.Zero;
+            if (node != null)
+            {
+                target = node.BoardPosition;
+            }
             board.Apply(command);
 
 
             if (node != null)
             {
                 RemoveChild(node);
+                node.QueueFree();
+                Pieces.Remove(kill.TargetID);
             }
 
 

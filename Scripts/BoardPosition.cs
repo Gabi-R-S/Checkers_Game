@@ -63,6 +63,7 @@ public partial class BoardPosition : Node3D, IMaterialChanger
                     var child = steps.Pop();
                     currentHovered.Remove(child);
                     RemoveChild(child);
+                    child.QueueFree();
                     heightSteps--; 
                 }
             } else if(value > heightSteps)

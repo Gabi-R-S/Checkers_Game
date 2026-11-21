@@ -33,7 +33,7 @@ public partial class StartGameButton : Button
             }
             
             master.Player1 = new HandControlToPlayerTurnController(master,Player.PLAYER1);
-            master.Player2 = new AIController(master,Player.PLAYER1,ai);
+            master.Player2 = new AIController(master,Player.PLAYER2,ai);
             
             master.StartGame();
 
