@@ -33,11 +33,11 @@ public partial class CameraController : Camera3D
         target = controller.Centre;
 
 
-        currentRadius = controller.BoardRadius;
-        maxRadius = 1.5f * currentRadius;
+        currentRadius = controller.BoardRadius*1.5f;
+        maxRadius = 2.5f * currentRadius;
 
 
-        Position = new Vector3(Mathf.Cos(currentRadius), 2, Mathf.Sin(currentRadius)).Normalized() * currentRadius;
+        Position = new Vector3(0, currentRadius*0.8f, -currentRadius).Normalized() * currentRadius;
 
         LookAt(Target);
     }

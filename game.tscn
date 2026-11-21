@@ -14,15 +14,26 @@ numberOfRowsWithPieces = 2
 [node name="BoardController" parent="." instance=ExtResource("1_80nbo")]
 piecePrefab = ExtResource("2_feb5d")
 pieceHeight = 0.5
+movementDuration = 0.4
+disappearDuration = 0.3
 
 [node name="BoardCamera" parent="." node_paths=PackedStringArray("controller") instance=ExtResource("2_e2o6t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -20)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 20)
+fov = 35.0
 controller = NodePath("../BoardController")
 movementSpeed = 5.0
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 85, 0)
+light_color = Color(0.703865, 0.647021, 0.494621, 1)
+light_energy = 0.1
+shadow_enabled = true
+
 [node name="OmniLight3D" type="SpotLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 24.8963, 0)
-spot_range = 40.0
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 120, 0)
+shadow_enabled = true
+spot_range = 1000.0
+spot_angle = 60.0
 
 [node name="PlayerTurnController" type="Node3D" parent="." node_paths=PackedStringArray("boardController")]
 script = ExtResource("5_ryrav")

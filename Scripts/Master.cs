@@ -28,11 +28,11 @@ public partial class Master : Node3D
         {
             if (command is Move || command is Kill)
             {
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     void NewTurn()

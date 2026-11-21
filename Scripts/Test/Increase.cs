@@ -8,7 +8,7 @@ public partial class Increase : Button
     public override void _Ready()
     {
       ButtonDown += () => {
-        target?.IncreaseHeightSteps();
+        target?.IncreaseHeightSteps(null);
       };
     }
 }

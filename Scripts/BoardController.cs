@@ -15,7 +15,10 @@ public partial class BoardController : Node3D
     float Positionspacing = 1.0f;
     [Export]
     float pieceHeight = 1.0f;
-
+    [Export]
+    float movementDuration = 0.8f;
+    [Export]
+    float disappearDuration = 0.6f;
 
     Board board;
     public Board Board
@@ -175,8 +178,7 @@ public partial class BoardController : Node3D
         {
             board.Apply(command);
 
-            GetBoardPositionNode(heightCommand.X, heightCommand.Y)?.IncreaseHeightSteps();
-            callback?.Invoke();
+            GetBoardPositionNode(heightCommand.X, heightCommand.Y)?.IncreaseHeightSteps(callback);
         }
         else if (command is Move move)
         {
@@ -185,10 +187,8 @@ public partial class BoardController : Node3D
             var node = GetPieceNode(move.PieceID);
             if (node != null)
             {
-                node.Position = GetPiecePosition(move.X, move.Y);
+                node.MoveInArc(GetPiecePosition(move.X, move.Y), movementDuration, 3, callback);
             }
-
-            callback?.Invoke();
         }
         else if (command is Kill kill)
         {
@@ -204,9 +204,13 @@ public partial class BoardController : Node3D
 
             if (node != null)
             {
+                node.Disappear(disappearDuration, () =>
+                {
+
+                    node.QueueFree();
+                    Pieces.Remove(kill.TargetID);
+                });
                 RemoveChild(node);
-                node.QueueFree();
-                Pieces.Remove(kill.TargetID);
             }
 
 
@@ -214,10 +218,9 @@ public partial class BoardController : Node3D
 
             if (node != null)
             {
-                node.Position = GetPiecePosition((uint)target.X, (uint)target.Y);
+                node.MoveInArc(GetPiecePosition((uint)target.X, (uint)target.Y), movementDuration, 3, callback);
             }
 
-            callback.Invoke();
         }
 
     }

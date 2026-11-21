@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using static Godot.CollisionObject3D;
 public partial class BoardPosition : Node3D, IMaterialChanger
 {
-   public void SetMaterial(MaterialChangerMaterial material)
+    public void SetMaterial(MaterialChangerMaterial material)
     {
-        foreach(var step in steps)
+        foreach (var step in steps)
         {
             var materialChanger = step.FindChild("Mesh") as MeshMaterialChanger;
             if (materialChanger != null)
@@ -27,36 +27,57 @@ public partial class BoardPosition : Node3D, IMaterialChanger
     PackedScene heightStepPrefab;
     [Export]
     float heightPerStep;
-
+    [Export]
+    float pieceAppearDuration = 0.3f;
     uint heightSteps = 0;
-    Stack<Area3D> steps = new ();
+    Stack<Area3D> steps = new();
 
-    public event Action<uint,uint> Hover;
-    public event Action<uint,uint> Unhover;
-    public event Action<uint,uint> Clicked;
+    public event Action<uint, uint> Hover;
+    public event Action<uint, uint> Unhover;
+    public event Action<uint, uint> Clicked;
 
     HashSet<Node3D> currentHovered = new HashSet<Node3D>();
 
-    public void IncreaseHeightSteps()
+    Action increaseCallback;
+    public void IncreaseHeightSteps(Action callback)
     {
-        if(heightSteps < MAX_HEIGHT_STEPS)
+        if (heightSteps < MAX_HEIGHT_STEPS)
         {
+            increaseCallback = callback;
             HeightSteps++;
         }
     }
     public void DecreaseHeightSteps()
     {
-        if(heightSteps > 0)
+        if (heightSteps > 0)
         {
             HeightSteps--;
         }
     }
+
+    public void Appear(Node3D target, float duration = 0.5f, Action onCompleted = null)
+    {
+        target.Scale = new Vector3(0.001f,0.001f,0.001f);
+
+        Tween tween = target.CreateTween();
+
+        tween.SetTrans(Tween.TransitionType.Sine);
+        tween.SetEase(Tween.EaseType.Out);
+
+        tween.TweenProperty(target, "scale", Vector3.One, duration);
+
+        if (onCompleted != null)
+        { 
+            tween.TweenCallback(Callable.From(onCompleted)); 
+        }
+    }
+
     public uint HeightSteps
     {
         get => heightSteps;
         set
         {
-            if(value < heightSteps)
+            if (value < heightSteps)
             {
                 while (heightSteps > value)
                 {
@@ -64,22 +85,24 @@ public partial class BoardPosition : Node3D, IMaterialChanger
                     currentHovered.Remove(child);
                     RemoveChild(child);
                     child.QueueFree();
-                    heightSteps--; 
+                    heightSteps--;
                 }
-            } else if(value > heightSteps)
+            }
+            else if (value > heightSteps)
             {
                 while (heightSteps < value)
                 {
                     var child = heightStepPrefab.Instantiate<Area3D>();
-                    child.Position = new Vector3(0,heightPerStep * heightSteps,0);
-                    
+                    child.Position = new Vector3(0, heightPerStep * heightSteps, 0);
+
                     AddChild(child);
                     steps.Push(child);
-                    
+
                     var entered = () => OnMouseEntered(child);
-                    var exited = () => OnMouseExited(child); 
-                    InputEventEventHandler clicked = (a,@event,c,d,e) => {
-                        if(@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left && currentHovered.Count > 0)
+                    var exited = () => OnMouseExited(child);
+                    InputEventEventHandler clicked = (a, @event, c, d, e) =>
+                    {
+                        if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left && currentHovered.Count > 0)
                         {
                             OnChildClicked();
                         }
@@ -88,14 +111,16 @@ public partial class BoardPosition : Node3D, IMaterialChanger
                     child.MouseEntered += entered;
                     child.MouseExited += exited;
                     child.InputEvent += clicked;
-                    child.TreeExited += () => 
+                    child.TreeExited += () =>
                         {
-                            child.MouseEntered -= entered; 
+                            child.MouseEntered -= entered;
                             child.MouseExited -= exited;
                             child.InputEvent -= clicked;
-                        };                
-    
-                    heightSteps++; 
+                        };
+
+                    heightSteps++;
+                    Appear(child, pieceAppearDuration, increaseCallback);
+                    increaseCallback = null;
                 }
             }
         }
@@ -103,21 +128,21 @@ public partial class BoardPosition : Node3D, IMaterialChanger
 
     void OnMouseEntered(Node3D node)
     {
-        if(currentHovered.Add(node))
+        if (currentHovered.Add(node))
         {
-            Hover?.Invoke(X,Y);
+            Hover?.Invoke(X, Y);
         }
     }
     void OnMouseExited(Node3D node)
     {
-        if(currentHovered.Remove(node))
+        if (currentHovered.Remove(node))
         {
-            Unhover?.Invoke(X,Y);
+            Unhover?.Invoke(X, Y);
         }
     }
     void OnChildClicked()
     {
-        Clicked?.Invoke(X,Y);
+        Clicked?.Invoke(X, Y);
     }
 
 }
